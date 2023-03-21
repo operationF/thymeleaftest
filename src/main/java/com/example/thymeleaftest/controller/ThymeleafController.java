@@ -1,4 +1,4 @@
-package com.example.thymeleaftest.Controller;
+package com.example.thymeleaftest.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
