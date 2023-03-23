@@ -2,10 +2,13 @@ package com.example.thymeleaftest.controller;
 
 import com.example.thymeleaftest.model.Board;
 import com.example.thymeleaftest.repository.BoardRepository;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import com.example.thymeleaftest.validator.BoardValidator;
 
 import java.util.List;
 
@@ -15,6 +18,10 @@ public class BoardController {
 
     @Autowired
     private BoardRepository boardRepository;
+
+    @Autowired
+    private BoardValidator boardValidator;
+
     @GetMapping("/list")
     public String list(Model model){
         List<Board> boards = boardRepository.findAll();
@@ -34,7 +41,11 @@ public class BoardController {
     }
 
     @PostMapping("/form")
-    public String write(@ModelAttribute Board board){
+    public String write(@Valid Board board, BindingResult bindingResult){
+        boardValidator.validate(board, bindingResult);
+        if(bindingResult.hasErrors()){
+            return "board/form";
+        }
         boardRepository.save(board);
         return "redirect:/board/list";
     }
