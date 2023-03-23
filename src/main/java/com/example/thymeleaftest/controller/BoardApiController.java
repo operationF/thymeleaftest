@@ -22,6 +22,16 @@ class BoardApiController {
     }
     // end::get-aggregate-root[]
 
+    @GetMapping("/Boards/title")
+    public Board getBoardByTitle(@RequestParam(required = true) String title){
+        return repository.findByTitle(title);
+    }
+
+    @GetMapping("/Boards/content")
+    public Board getBoardByContent(@RequestParam(required = true) String content){
+        return repository.findByContent(content);
+    }
+
     @PostMapping("/Boards")
     Board newBoard(@RequestBody Board newBoard) {
         return repository.save(newBoard);
