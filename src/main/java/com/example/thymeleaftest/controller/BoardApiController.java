@@ -14,12 +14,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-class BoardAPIController {
+class BoardApiController {
 
     @Autowired
     private final BoardRepository repository;
 
-    BoardAPIController(BoardRepository repository) {
+    BoardApiController(BoardRepository repository) {
         this.repository = repository;
     }
 
@@ -43,8 +43,7 @@ class BoardAPIController {
     @GetMapping("/Boards/{id}")
     Board one(@PathVariable Long id) {
 
-        return repository.findById(id)
-                .orElseThrow(() -> new BoardNotFoundException(id));
+        return repository.findById(id).orElse(null);
     }
 
     @PutMapping("/Boards/{id}")
