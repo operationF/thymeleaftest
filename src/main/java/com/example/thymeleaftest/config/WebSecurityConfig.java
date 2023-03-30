@@ -27,7 +27,7 @@ public class WebSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/", "/css/**").permitAll()
+                        .requestMatchers("/", "/account/register", "/css/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin((form) -> form
@@ -46,16 +46,18 @@ public class WebSecurityConfig {
                 .dataSource(dataSource)
                 .passwordEncoder(passwordEncoder())
                 .usersByUsernameQuery("select username,password,enabled "
-                        + "from members "
+                        + "from user "
                         + "where username = ?")
-                .authoritiesByUsernameQuery("select username, name "
-                        + "from user_role ur inner join users u on ur.user_id = u.id"
-                        + "inner join role r on ur.role_id = r.id"
-                        + "where user_id = ?");
+                .authoritiesByUsernameQuery("select u.username, r.name "
+                        + "from user_role ur inner join user u on ur.user_id = u.id "
+                        + "inner join role r on ur.role_id = r.id "
+                        + "where u.username = ?");
     }
 
-    public PasswordEncoder passwordEncoder() {
+    @Bean
+    public static PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
 }
+
